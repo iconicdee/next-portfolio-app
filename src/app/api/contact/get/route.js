@@ -1,5 +1,5 @@
 import { connectToDB } from "@/database";
-import Contact from "@/database/models/contact";
+import Contact from "@/models/contact";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
@@ -15,7 +15,7 @@ export async function POST(request) {
     if (!name || !email || !message) {
       return NextResponse.json(
         { success: false, message: "All fields are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -24,7 +24,7 @@ export async function POST(request) {
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { success: false, message: "Invalid email format" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -32,7 +32,7 @@ export async function POST(request) {
     if (name.trim().length < 2) {
       return NextResponse.json(
         { success: false, message: "Name must be at least 2 characters" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -40,7 +40,7 @@ export async function POST(request) {
     if (message.trim().length < 10) {
       return NextResponse.json(
         { success: false, message: "Message must be at least 10 characters" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -60,7 +60,7 @@ export async function POST(request) {
         message: "Message sent successfully",
         data: newContact,
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Contact API error:", error);
@@ -71,7 +71,7 @@ export async function POST(request) {
         message: "Failed to send message. Please try again later.",
         error: error.message,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -88,14 +88,14 @@ export async function GET(request) {
 
     return NextResponse.json(
       { success: true, data: contacts },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Contact GET error:", error);
 
     return NextResponse.json(
       { success: false, message: "Failed to retrieve contacts" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
