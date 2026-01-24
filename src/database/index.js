@@ -5,7 +5,7 @@ const MONGODB_URI =
 
 if (!MONGODB_URI) {
   throw new Error(
-    "Please define the MONGODB_URI environment variable in .env.local"
+    "Please define the MONGODB_URI environment variable in .env.local",
   );
 }
 
@@ -14,7 +14,7 @@ if (!cached) {
   cached = global._mongo = { conn: null, promise: null };
 }
 
-export default async function connectToDB() {
+export async function connectToDB() {
   if (cached.conn) {
     return cached.conn;
   }
