@@ -127,7 +127,7 @@ export default function ClientAboutView({ data }) {
             variants={setVariants}
             className="grid gap-4 grid-cols-2 lg:grid-cols-3"
           >
-            {data?.skills.split(",").map((skill, index) => (
+            {data?.skills?.split(",")?.map((skill, index) => (
               <motion.div
                 variants={skillItemVariant}
                 key={index}
