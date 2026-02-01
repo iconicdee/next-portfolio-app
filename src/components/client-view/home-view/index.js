@@ -11,6 +11,7 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 import aiImage from "../../../assets/image.png";
+import { useRouter } from "next/navigation";
 
 function variants() {
   return {
@@ -32,24 +33,34 @@ const socialItem = [
   {
     id: "facebook",
     icon: <FaFacebookF color="rgba(13, 183, 96, 1)" className="w-7 h-7" />,
+    url: "https://www.facebook.com/yongking.king.92",
   },
   {
     id: "instagram",
     icon: <FaInstagram color="rgba(13, 183, 96, 1)" className="w-7 h-7" />,
+    url: "https://instagram.com/iconicdeeh",
   },
   {
     id: "linkedIn",
     icon: <FaLinkedinIn color="rgba(13, 183, 96, 1)" className="w-7 h-7" />,
+    url: "https://www.linkedin.com/in/aina-david-webdev/",
   },
   {
     id: "twitter",
     icon: <FaTwitter color="rgba(13, 183, 96, 1)" className="w-7 h-7" />,
+    url: "https://x.com/home",
   },
 ];
 
 export default function ClientHomeView({ data }) {
+  const router = useRouter();
   const setVariants = useMemo(() => variants(), []);
   const containerRef = useRef(null);
+
+  const handleSocialClick = (url) => {
+    window.open(url, "_blank");
+  };
+
   return (
     <div className="max-w-screen-xl mt-24 px-8 xl:px-16 mx-auto" id="home">
       <AnimationWrapper
@@ -90,6 +101,7 @@ export default function ClientHomeView({ data }) {
                   }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.8, rotate: -360, borderRadius: "100%" }}
+                  onClick={() => handleSocialClick(item.url)}
                 >
                   {item.icon}
                 </motion.div>

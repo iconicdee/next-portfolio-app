@@ -56,6 +56,7 @@ export default function AdminView() {
   const [update, setUpdate] = useState(false);
   const [authUser, setAuthUser] = useState(false);
   const [loginFormData, setLoginFormData] = useState(initialLoginFormData);
+  const [contacts, setContact] = useState([]);
 
   const menuItem = [
     {
@@ -121,7 +122,7 @@ export default function AdminView() {
     {
       id: "contact",
       label: "Contact",
-      Component: <AdminContactView />,
+      Component: <AdminContactView formData={allData && allData?.contact} />,
     },
   ];
 
@@ -181,6 +182,7 @@ export default function AdminView() {
   useEffect(() => {
     extractAllDatas();
   }, [extractAllDatas]);
+  console.log("alldata", allData);
 
   function resetFormDatas() {
     (setHomeData(initialHomeData),

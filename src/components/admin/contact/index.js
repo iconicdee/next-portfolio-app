@@ -15,6 +15,19 @@ const controls = [
   },
 ];
 
-export default function AdminContactView() {
-  return <div>AdminContactView</div>;
+export default function AdminContactView({ formData }) {
+  console.log("formData", formData);
+  return (
+    <div className="flex flex-col gap-5">
+      {formData && formData.length
+        ? formData.map((item) => (
+            <div className="p-5 border" key={item._id}>
+              <p>{item.name} </p>
+              <p>{item.email} </p>
+              <p>{item.message} </p>
+            </div>
+          ))
+        : null}
+    </div>
+  );
 }
