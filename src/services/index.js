@@ -3,17 +3,16 @@
 // Dynamic base URL - works on both local and production
 function getBaseURL() {
   if (typeof window !== "undefined") {
-    // Client-side
-    return process.env.NEXT_PUBLIC_API_BASE_URL || window.location.origin;
+    // Client-side - use current origin
+    return window.location.origin;
   }
-  // Server-side
-  return process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+  // Server-side fallback
+  return "http://localhost:3000";
 }
-
-const API_BASE = getBaseURL();
 
 function getData(currentTab) {
   try {
+    const API_BASE = getBaseURL();
     const url = `${API_BASE}/api/${currentTab}/get`;
     console.log("Fetching from:", url);
 
@@ -22,20 +21,29 @@ function getData(currentTab) {
       headers: { "Content-Type": "application/json" },
       cache: "no-store",
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log("Response status:", response.status);
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Response data:", data);
+        return data;
+      })
       .catch((e) => {
         console.error("Fetch error:", e);
-        return null;
+        return { success: false, error: e.message };
       });
   } catch (e) {
-    console.log(e);
-    return null;
+    console.error("getData error:", e);
+    return { success: false, error: e.message };
   }
 }
 
 function addData(currentTab, formData) {
   try {
+    const API_BASE = getBaseURL();
     const url = `${API_BASE}/api/${currentTab}/add`;
+
     return fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -45,17 +53,19 @@ function addData(currentTab, formData) {
       .then((response) => response.json())
       .catch((e) => {
         console.error("Fetch error:", e);
-        return null;
+        return { success: false, error: e.message };
       });
   } catch (e) {
-    console.log(e);
-    return null;
+    console.error("addData error:", e);
+    return { success: false, error: e.message };
   }
 }
 
 function updateData(currentTab, formData) {
   try {
+    const API_BASE = getBaseURL();
     const url = `${API_BASE}/api/${currentTab}/update`;
+
     return fetch(url, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -65,17 +75,19 @@ function updateData(currentTab, formData) {
       .then((response) => response.json())
       .catch((e) => {
         console.error("Fetch error:", e);
-        return null;
+        return { success: false, error: e.message };
       });
   } catch (e) {
-    console.log(e);
-    return null;
+    console.error("updateData error:", e);
+    return { success: false, error: e.message };
   }
 }
 
 function login(formData) {
   try {
+    const API_BASE = getBaseURL();
     const url = `${API_BASE}/api/login`;
+
     return fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -85,11 +97,11 @@ function login(formData) {
       .then((response) => response.json())
       .catch((e) => {
         console.error("Fetch error:", e);
-        return null;
+        return { success: false, error: e.message };
       });
   } catch (e) {
-    console.log(e);
-    return null;
+    console.error("login error:", e);
+    return { success: false, error: e.message };
   }
 }
 
