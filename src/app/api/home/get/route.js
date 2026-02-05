@@ -9,16 +9,17 @@ export async function GET(req) {
     const extractedData = await Home.find({});
     return NextResponse.json(
       { success: true, data: extractedData },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (e) {
     console.error(e);
+    console.log("something went wrong");
     return NextResponse.json(
       {
         success: false,
         message: "Something went wrong. Please try again later.",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

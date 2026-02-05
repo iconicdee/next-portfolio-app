@@ -1,77 +1,96 @@
-export async function addData(currentTab, formData) {
+"use client";
+
+// Dynamic base URL - works on both local and production
+function getBaseURL() {
+  if (typeof window !== "undefined") {
+    // Client-side
+    return process.env.NEXT_PUBLIC_API_BASE_URL || window.location.origin;
+  }
+  // Server-side
+  return process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+}
+
+const API_BASE = getBaseURL();
+
+function getData(currentTab) {
   try {
-    const res = await fetch(`/api/${currentTab}/add`, {
+    const url = `${API_BASE}/api/${currentTab}/get`;
+    console.log("Fetching from:", url);
+
+    return fetch(url, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      cache: "no-store",
+    })
+      .then((response) => response.json())
+      .catch((e) => {
+        console.error("Fetch error:", e);
+        return null;
+      });
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+}
+
+function addData(currentTab, formData) {
+  try {
+    const url = `${API_BASE}/api/${currentTab}/add`;
+    return fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
-    });
-
-    const payload = await res.json();
-    if (!res.ok) {
-      console.log("something went wrong");
-    }
-    return payload;
+      cache: "no-store",
+    })
+      .then((response) => response.json())
+      .catch((e) => {
+        console.error("Fetch error:", e);
+        return null;
+      });
   } catch (e) {
     console.log(e);
+    return null;
   }
 }
 
-export async function getData(currentTab) {
+function updateData(currentTab, formData) {
   try {
-    const response = await fetch(`/api/${currentTab}/get`, {
-      method: "GET",
-    });
-    const result = await response.json();
-
-    if (!result) {
-      console.log("getting result failed");
-    }
-
-    return result;
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-export async function updateData(currentTab, formData) {
-  try {
-    const res = await fetch(`/api/${currentTab}/update`, {
+    const url = `${API_BASE}/api/${currentTab}/update`;
+    return fetch(url, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
-    });
-
-    if (!res.ok) {
-      const text = await res.text();
-      console.log("update failed:", res.status, text);
-      return {
-        success: false,
-        message: text || "request failed",
-        status: res.status,
-      };
-    }
-
-    const payload = await res.json();
-    return payload;
+      cache: "no-store",
+    })
+      .then((response) => response.json())
+      .catch((e) => {
+        console.error("Fetch error:", e);
+        return null;
+      });
   } catch (e) {
     console.log(e);
+    return null;
   }
 }
 
-export async function login(formData) {
+function login(formData) {
   try {
-    const res = await fetch(`/api/login`, {
+    const url = `${API_BASE}/api/login`;
+    return fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
-    });
-    const payload = await res.json();
-    if (!res.ok) {
-      console.log("something went wrong");
-    }
-    return payload;
+      cache: "no-store",
+    })
+      .then((response) => response.json())
+      .catch((e) => {
+        console.error("Fetch error:", e);
+        return null;
+      });
   } catch (e) {
     console.log(e);
-    console.log("an error occured");
+    return null;
   }
 }
+
+module.exports = { getData, addData, updateData, login };

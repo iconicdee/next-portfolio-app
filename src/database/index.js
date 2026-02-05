@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const MONGODB_URI =
   process.env.MONGODB_URI || process.env.NEXT_PUBLIC_MONGODB_URI;
@@ -14,18 +14,20 @@ if (!cached) {
   cached = global._mongo = { conn: null, promise: null };
 }
 
-export default async function connectToDB() {
+async function connectToDB() {
   if (cached.conn) {
     return cached.conn;
   }
+
   if (!cached.promise) {
     const opts = { bufferCommands: false };
-    cached.promise = mongoose
-      .connect(MONGODB_URI, opts)
-      .then((mongooseInstance) => {
-        return mongooseInstance;
-      });
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      return mongoose;
+    });
   }
+
   cached.conn = await cached.promise;
   return cached.conn;
 }
+
+module.exports = connectToDB;
